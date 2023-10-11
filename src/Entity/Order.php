@@ -7,25 +7,38 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
+
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']]
+)]
+
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read'])]
     private $id;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['read'])]
     private $datetime;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['read'])]
     private $total;
 
     #[ORM\OneToMany(mappedBy: 'order_associated', targetEntity: LineOrder::class, cascade: ["persist"])]
+    #[Groups(['read'])]
     private $lineOrders;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['read'])]
     private $status;
 
     public function __construct()

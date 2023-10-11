@@ -5,26 +5,38 @@ namespace App\Entity;
 use App\Repository\LineOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']]
+)]
+
 #[ORM\Entity(repositoryClass: LineOrderRepository::class)]
 class LineOrder
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read'])]
     private $id;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read'])]
     private $quantity;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['read'])]
     private $subtotal;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'lineOrders')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read'])]
     private $order_associated;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(nullable: false,onDelete:"CASCADE")]
+    #[Groups(['read'])]
     private $product;
 
     public function getId(): ?int
