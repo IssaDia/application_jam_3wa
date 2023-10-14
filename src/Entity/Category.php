@@ -25,6 +25,7 @@ class Category
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Unique]
     #[Groups(['read'])]
     private $name;
 
@@ -33,6 +34,7 @@ class Category
     private $description;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Unique]
     #[Groups(['read'])]
     private $slug;
 

@@ -28,7 +28,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[UniqueEntity("email")]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/')]
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['read'])]
