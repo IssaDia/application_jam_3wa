@@ -9,21 +9,22 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    #[Route('/login', name: 'login')]
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    #[Route('/api/login', name: 'api_login', methods: ['POST'])]
+    public function api_login():Response
     {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
+      
 
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $user = $this->getUser();
 
-        return $this->render('login/index.html.twig', [
-            'last_username' => $lastUsername,
-            'error' => $error,
+        return $this->json([
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles(),
         ]);
+
 
     }
     #[Route('/logout', name: 'logout')]
-    public function logout(){}
+    public function logout(){
+        return new Response('Logged out successfully');
+    }
 }

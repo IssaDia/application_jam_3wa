@@ -5,7 +5,8 @@ controllers:
 kernel:
   resource: ../src/Kernel.php
   type: annotation
-
-auth:
-  path: /login
-  methods: ["POST"]
+api_login:
+  path: /api/login
+api_signup:
+  path: /api/signup
+  controller: App\Controller\SignupController::signup

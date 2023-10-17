@@ -2,25 +2,33 @@ security:
   enable_authenticator_manager: true
 
   firewalls:
-    login:
-    api:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+    login:
+      pattern: ^/api/login
+      stateless: true
+      json_login:
+        check_path: /api/login
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+    api:
+      pattern: ^/api
+      stateless: true
+      jwt: ~
+
     main:
       lazy:
         true
         # provider that you set earlier inside providers
       provider: app_user_provider
-      form_login:
-        login_path: login
-        check_path: login
-        default_target_path: home
-
-      logout:
-        path: logout
-        target: home
-
+      json_login:
+        check_path: api_login
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+    # form_login:
+    #   login_path: login
+    #   check_path: login
+    #   default_target_path: home
   password_hashers:
     App\Entity\User:
       algorithm: auto
@@ -44,5 +52,7 @@ security:
 
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
+    - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 when@test:
   security:
