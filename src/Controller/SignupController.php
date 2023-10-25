@@ -42,10 +42,11 @@ class SignupController extends AbstractController
     public function signup(Request $request): Response
     {
         
-        $data = $request->getContent();
+        $data = json_decode($request->getContent(), true);
 
         // // Deserialize the request data to User Entity
-        $user = $this->serializer->deserialize($data, User::class, 'json');
+        $user = $this->serializer->deserialize(json_encode($data), User::class, 'json');
+
 
         $user->setRoles($data["roles"]);
 

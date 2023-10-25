@@ -5,8 +5,11 @@ controllers:
 kernel:
   resource: ../src/Kernel.php
   type: annotation
-api_login:
-  path: /api/login
+api_login_check:
+  path: /api/login_check
 api_signup:
   path: /api/signup
   controller: App\Controller\SignupController::signup
+api_login:
+  path: /api/login
+  controller: App\Controller\LoginController::login
