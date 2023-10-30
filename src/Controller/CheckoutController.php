@@ -42,7 +42,7 @@ class CheckoutController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/checkout', name: 'api_checkout')]
+    #[Route('/checkout', name: 'checkout')]
     public function index(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session)
     {
         $tokenProvider = $this->container->get('security.csrf.token_manager');
