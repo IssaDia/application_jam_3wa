@@ -16,6 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CheckoutController extends AbstractController
 {
+    
     #[IsGranted("ROLE_USER")]
     #[Route('/checkout_success/{token}', name: 'checkout_success')]
     public function checkout(EntityManagerInterface $manager, SessionInterface $session, OrderRepository $orderRepo, string $token)
@@ -41,7 +42,7 @@ class CheckoutController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/checkout', name: 'checkout')]
+    #[Route('/checkout', name: 'api_checkout')]
     public function index(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session)
     {
         $tokenProvider = $this->container->get('security.csrf.token_manager');
