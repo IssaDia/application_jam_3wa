@@ -13,3 +13,6 @@ api_signup:
 api_login:
   path: /api/login
   controller: App\Controller\LoginController::login
+api_checkout:
+  path: /api/checkout
+  controller: App\Controller\CheckoutController::checkout
