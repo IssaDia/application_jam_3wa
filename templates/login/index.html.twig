@@ -9,7 +9,7 @@
         {% endif %}
 
         <h1 class="my-5">Login</h1>
-        <form action="{{ path('login') }}" method="post">
+        <form action="{{ path('api_login') }}" method="post">
             <!-- Email input -->
             <div class="form-outline mb-4">
                 <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}">
