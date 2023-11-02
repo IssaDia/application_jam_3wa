@@ -42,11 +42,11 @@ class CheckoutController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/checkout', name: 'checkout')]
-    public function index(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session)
+    #[Route('/api/checkout', name: 'api_checkout')]
+    public function checkout_check(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session)
     {
-        $tokenProvider = $this->container->get('security.csrf.token_manager');
-        $token = $tokenProvider->getToken('stripe_token')->getValue();
+        // $tokenProvider = $this->container->get('security.csrf.token_manager');
+        // $token = $tokenProvider->getToken('stripe_token')->getValue();
         $stripe_items = [];
         $cart = $session->get("cart", []);
         if (empty($cart)) {
@@ -88,8 +88,8 @@ class CheckoutController extends AbstractController
         $session = \Stripe\Checkout\Session::create([
             'line_items' => $stripe_items,
             'mode' => 'payment',
-            'success_url' => 'http://localhost:8000/checkout_success/' . $token,
-            'cancel_url' => 'http://localhost:8000/checkout_error'
+            'success_url' => 'http://localhost:5173/checkout_success',
+            'cancel_url' => 'http://localhost:5173/checkout_error'
         ]);
 
         return $this->redirect($session->url, 303);
