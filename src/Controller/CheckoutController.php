@@ -13,13 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Request;
+use Psr\Log\LoggerInterface;
+
 
 class CheckoutController extends AbstractController
 {
     
     #[IsGranted("ROLE_USER")]
     #[Route('/checkout_success/{token}', name: 'checkout_success')]
-    public function checkout(EntityManagerInterface $manager, SessionInterface $session, OrderRepository $orderRepo, string $token)
+    public function checkout(EntityManagerInterface $manager, SessionInterface $session, OrderRepository $orderRepo, string $token, LoggerInterface $logger)
     {
         if ($this->isCsrfTokenValid('stripe_token', $token)) {
             $order = $orderRepo->find($session->get("order_waiting"));
@@ -43,12 +46,14 @@ class CheckoutController extends AbstractController
 
     #[IsGranted("ROLE_USER")]
     #[Route('/api/checkout', name: 'api_checkout')]
-    public function checkout_check(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session)
+    public function checkout_check(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session, Request $request, LoggerInterface $logger)
     {
         // $tokenProvider = $this->container->get('security.csrf.token_manager');
         // $token = $tokenProvider->getToken('stripe_token')->getValue();
         $stripe_items = [];
-        $cart = $session->get("cart", []);
+        // $cart = $session->get("cart", []);
+        $cart = $request->request->get('cart');
+        $logger->info('Cart data: ' . print_r($cart, true));
         if (empty($cart)) {
             return $this->redirectToRoute("home");
         }
@@ -92,6 +97,6 @@ class CheckoutController extends AbstractController
             'cancel_url' => 'http://localhost:5173/checkout_error'
         ]);
 
-        return $this->redirect($session->url, 303);
+        return "success";
     }
 }
