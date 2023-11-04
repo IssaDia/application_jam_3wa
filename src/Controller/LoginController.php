@@ -41,7 +41,6 @@ class LoginController extends AbstractController
             return new JsonResponse(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Generate a JWT token for the user
         $token = $jwtManager->create($user);
 
         return new JsonResponse(['token' => $token], Response::HTTP_OK);

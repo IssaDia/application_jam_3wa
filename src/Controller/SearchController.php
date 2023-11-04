@@ -20,10 +20,7 @@ class SearchController extends AbstractController
     {
         $products = $productRepository->findAllLike($val);
        
-        // $productsNames = array_map(function($p){
-        //     return $p->getName();
-        // },$products);
-
+      
         $productsNames=[];
         foreach($products as $product){
             $productsNames[] = $product->getName();
