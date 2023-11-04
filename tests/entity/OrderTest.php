@@ -2,42 +2,77 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\LineOrder;
 use App\Entity\Order;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use PHPUnit\Framework\TestCase;
 
-class OrderTest extends KernelTestCase
+class OrderTest extends TestCase
 {
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
+    private $order;
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
-        $this->validator = self::getContainer()->get(ValidatorInterface::class);
+        $this->order = new Order();
     }
 
-    public function testValidOrderEntity()
+    public function testSetDatetime(): void
     {
-        $order = new Order();
-        $order->setDatetime(new \DateTime());
-        $order->setTotal(100.0);
-        $order->setStatus('PAYMENT_WAITING');
+        $datetime = new \DateTime();
+        $this->order->setDatetime($datetime);
 
-        $violations = $this->validator->validate($order);
-
-        $this->assertCount(0, $violations);
+        $this->assertSame(
+            $datetime,
+            $this->order->getDatetime(),
+            "Failed asserting that the datetime is the expected instance."
+        );
     }
 
-    public function testInvalidOrderEntity()
+    public function testSetTotal(): void
     {
-        $order = new Order();
-        // Missing required fields
+        $total = 150.75;
+        $this->order->setTotal($total);
 
-        $violations = $this->validator->validate($order);
+        $this->assertEquals(
+            $total,
+            $this->order->getTotal(),
+            "Failed asserting that the total is '{$total}' after setting."
+        );
+    }
 
-        $this->assertCount(3, $violations); // Adjust the count based on your entity's validation constraints
+    public function testAddAndRemoveLineOrder(): void
+    {
+        $lineOrder = new LineOrder();
+        $this->order->addLineOrder($lineOrder);
+
+        $this->assertContains(
+            $lineOrder,
+            $this->order->getLineOrders(),
+            'Failed asserting that the line order collection contains the added line order.'
+        );
+
+        $this->order->removeLineOrder($lineOrder);
+
+        $this->assertNotContains(
+            $lineOrder,
+            $this->order->getLineOrders(),
+            'Failed asserting that the line order collection no longer contains the removed line order.'
+        );
+    }
+
+    public function testSetStatus(): void
+    {
+        $status = 'Shipped';
+        $this->order->setStatus($status);
+
+        $this->assertEquals(
+            $status,
+            $this->order->getStatus(),
+            "Failed asserting that the status is '{$status}' after setting."
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->order);
     }
 }

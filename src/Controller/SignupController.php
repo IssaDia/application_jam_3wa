@@ -44,24 +44,24 @@ class SignupController extends AbstractController
         
         $data = json_decode($request->getContent(), true);
 
-        // // Deserialize the request data to User Entity
+      
         $user = $this->serializer->deserialize(json_encode($data), User::class, 'json');
 
 
         $user->setRoles($data["roles"]);
 
-        // // Validate the User Entity
+       
         $errors = $this->validator->validate($user);
 
         if (count($errors) > 0) {
             return $this->json(['errors' => $errors], Response::HTTP_BAD_REQUEST);
         }
 
-        // // Hash the user's password
+       
         $hashedPassword = $this->passwordHasher->hashPassword($user, $user->getPassword());
         $user->setPassword($hashedPassword);
 
-        // // Save the user to the database
+       
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

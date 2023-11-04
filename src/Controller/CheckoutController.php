@@ -14,26 +14,23 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
-use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 class CheckoutController extends AbstractController
 {
-    
     #[IsGranted("ROLE_USER")]
-    #[Route('/checkout_success/{token}', name: 'checkout_success')]
-    public function checkout(EntityManagerInterface $manager, SessionInterface $session, OrderRepository $orderRepo, string $token, LoggerInterface $logger)
+    #[Route('/checkout_success', name: 'checkout_success')]
+    public function checkout(EntityManagerInterface $manager, SessionInterface $session, OrderRepository $orderRepo, string $token)
     {
-        if ($this->isCsrfTokenValid('stripe_token', $token)) {
+       
             $order = $orderRepo->find($session->get("order_waiting"));
             $order->setStatus("PAYMENT_OK");
             $manager->flush();
             return $this->render('checkout/success.html.twig', [
                 "order" => $order
             ]);
-        } else {
-            return $this->render('checkout/error.html.twig', []);
-        }
+       
     }
 
     #[IsGranted("ROLE_USER")]
@@ -45,15 +42,12 @@ class CheckoutController extends AbstractController
     }
 
     #[IsGranted("ROLE_USER")]
-    #[Route('/api/checkout', name: 'api_checkout')]
-    public function checkout_check(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session, Request $request, LoggerInterface $logger)
+    #[Route('/checkout', name: 'checkout')]
+    public function checkout_check(EntityManagerInterface $manager, ProductRepository $productRepo, SessionInterface $session, Request $request)
     {
-        // $tokenProvider = $this->container->get('security.csrf.token_manager');
-        // $token = $tokenProvider->getToken('stripe_token')->getValue();
+       
         $stripe_items = [];
-        // $cart = $session->get("cart", []);
-        $cart = $request->request->get('cart');
-        $logger->info('Cart data: ' . print_r($cart, true));
+        $cart = json_decode($request->getContent(), true)['cart'];
         if (empty($cart)) {
             return $this->redirectToRoute("home");
         }
@@ -62,16 +56,15 @@ class CheckoutController extends AbstractController
         $order->setStatus("PAYMENT_WAITING");
         $total = 0;
 
-        foreach ($cart as $key => $quantity) {
-            $product = $productRepo->find($key);
+        foreach ($cart as $item) {
+            $product = $productRepo->find($item["id"]);
             $line = new LineOrder;
             $line->setProduct($product);
-            $line->setQuantity($quantity);
-            $line->setSubtotal($quantity * $product->getPrice());
-            $total += $quantity * $product->getPrice();
+            $line->setQuantity($item["quantity"]);
+            $line->setSubtotal($item["quantity"] * $product->getPrice());
+            $total += $item["quantity"] * $product->getPrice();
             $order->addLineOrder($line);
-            //equivalent
-            // $line->setOrderAssociated($order);
+          
             $stripe_items[] =
                 [
                     'price_data' => [
@@ -81,7 +74,7 @@ class CheckoutController extends AbstractController
                         ],
                         'unit_amount' => $product->getPrice(),
                     ],
-                    'quantity' => $quantity,
+                    'quantity' => $item["quantity"],
                 ];
         }
         $order->setTotal($total);
@@ -94,9 +87,11 @@ class CheckoutController extends AbstractController
             'line_items' => $stripe_items,
             'mode' => 'payment',
             'success_url' => 'http://localhost:5173/checkout_success',
-            'cancel_url' => 'http://localhost:5173/checkout_error'
+            'cancel_url' => 'http://localhost:8000/checkout_error'
         ]);
 
-        return "success";
+       
+        return new JsonResponse($session->url);
+
     }
 }

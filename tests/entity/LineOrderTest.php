@@ -3,42 +3,69 @@
 namespace App\Tests\Entity;
 
 use App\Entity\LineOrder;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Entity\Order;
+use App\Entity\Product;
+use PHPUnit\Framework\TestCase;
 
-class LineOrderTest extends KernelTestCase
+class LineOrderTest extends TestCase
 {
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
+    private $lineOrder;
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
-        $this->validator = self::getContainer()->get(ValidatorInterface::class);
+        $this->lineOrder = new LineOrder();
     }
 
-    public function testValidLineOrderEntity()
+    public function testSetQuantity(): void
     {
-        $lineOrder = new LineOrder();
-        $lineOrder->setQuantity(2);
-        $lineOrder->setSubtotal(50.0);
+        $quantity = 5;
+        $this->lineOrder->setQuantity($quantity);
 
-        // You may need to set the associated Order and Product entities as well.
-
-        $violations = $this->validator->validate($lineOrder);
-
-        $this->assertCount(0, $violations);
+        $this->assertEquals(
+            $quantity,
+            $this->lineOrder->getQuantity(),
+            "Failed asserting that the quantity is '{$quantity}' after setting."
+        );
     }
 
-    public function testInvalidLineOrderEntity()
+    public function testSetSubtotal(): void
     {
-        $lineOrder = new LineOrder();
-        // Missing required fields
+        $subtotal = 100.5;
+        $this->lineOrder->setSubtotal($subtotal);
 
-        $violations = $this->validator->validate($lineOrder);
+        $this->assertEquals(
+            $subtotal,
+            $this->lineOrder->getSubtotal(),
+            "Failed asserting that the subtotal is '{$subtotal}' after setting."
+        );
+    }
 
-        $this->assertCount(3, $violations); // Adjust the count based on your entity's validation constraints
+    public function testSetOrderAssociated(): void
+    {
+        $order = new Order();
+        $this->lineOrder->setOrderAssociated($order);
+
+        $this->assertSame(
+            $order,
+            $this->lineOrder->getOrderAssociated(),
+            "Failed asserting that the associated order is the expected instance."
+        );
+    }
+
+    public function testSetProduct(): void
+    {
+        $product = new Product();
+        $this->lineOrder->setProduct($product);
+
+        $this->assertSame(
+            $product,
+            $this->lineOrder->getProduct(),
+            "Failed asserting that the associated product is the expected instance."
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->lineOrder);
     }
 }

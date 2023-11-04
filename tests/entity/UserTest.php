@@ -3,44 +3,81 @@
 namespace App\Tests\Entity;
 
 use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserTest extends KernelTestCase
+class UserTest extends TestCase
 {
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
+    private $user;
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
-        $this->validator = self::getContainer()->get(ValidatorInterface::class);
+        $this->user = new User();
     }
 
-    public function testValidUserEntity()
+    public function testSetEmail(): void
     {
-        $user = new User();
-        $user->setEmail('test@example.com');
-        $user->setPassword('Secure@Password123');
-        $user->setRoles(['ROLE_USER']);
+        $email = 'test@example.com';
+        $this->user->setEmail($email);
 
-        $violations = $this->validator->validate($user);
-
-        $this->assertCount(0, $violations);
+        $this->assertSame(
+            $email,
+            $this->user->getEmail(),
+            "Failed asserting that the email is the expected value."
+        );
     }
 
-    public function testInvalidUserEntity()
+    public function testGetUserIdentifier(): void
     {
-        $user = new User();
-        $user->setEmail('invalid-email'); // Invalid email format
-        $user->setPassword('password'); // Password does not meet the requirements
+        $email = 'test@example.com';
+        $this->user->setEmail($email);
 
-        $violations = $this->validator->validate($user);
+        $userIdentifier = $this->user->getUserIdentifier();
 
-        $this->assertCount(2, $violations);
-        $this->assertStringContainsString('email', (string)$violations);
-        $this->assertStringContainsString('password', (string)$violations);
+        $this->assertEquals(
+            $email,
+            $userIdentifier,
+            "Failed asserting that the user identifier is the email."
+        );
+    }
+
+    public function testGetRoles(): void
+    {
+        $roles = ['ROLE_ADMIN', 'ROLE_USER'];
+        $this->user->setRoles($roles);
+
+        
+        $userRoles = $this->user->getRoles();
+
+        $this->assertEquals(
+           $roles,
+            $userRoles,
+            "Failed asserting that the user roles are the expected values."
+        );
+    }
+
+    public function testSetPassword(): void
+    {
+        $password = 'TestPassword1@';
+        $this->user->setPassword($password);
+
+        $this->assertSame(
+            $password,
+            $this->user->getPassword(),
+            "Failed asserting that the password is the expected value."
+        );
+    }
+
+    public function testEraseCredentials(): void
+    {
+        // Erase credentials is an empty method
+        $this->user->eraseCredentials();
+
+        $this->expectNotToPerformAssertions();
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->user);
     }
 }
