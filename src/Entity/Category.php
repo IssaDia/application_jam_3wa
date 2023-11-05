@@ -7,26 +7,39 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
+
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']]
+)]
+
 class Category
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Unique]
+    #[Groups(['read'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['read'])]
     private $description;
 
- 
-
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Unique]
+    #[Groups(['read'])]
     private $slug;
 
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'categories')]
+    #[Groups(['read'])]
     private $products;
 
     public function __construct()
