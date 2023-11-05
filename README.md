@@ -99,7 +99,6 @@ DATABASE_URL="mysql://user:password@127.0.0.1:8889/shop?serverVersion=5.7.9"
 
 ```
 
-```
 ### 3. Console
 
 Enfin, installez les dépendances, créez votre base de données et remplissez la des fixtures grâce aux commandes suivantes :
@@ -150,7 +149,7 @@ wget https://get.symfony.com/cli/installer -O - | bash
 mv /Users/VOTRENOM/.symfony5/bin/symfony /usr/local/bin/symfony
 ```
 
-### 🧪 Lancer les tests
+## 🧪 Lancer les tests
 
 Pour lancer les tests unitaires:
 
