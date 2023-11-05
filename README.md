@@ -1,16 +1,54 @@
-# Jam Project
+# 🍓 Jam
 
-## Description
 
 Projet e-commerce de confitures avec panier, espace d'administration et filtres avancés.
 
-### Technologies employées :
+# 📜 Sommaire
+
+- [Objectif](#-objectif)
+- [Construit avec](#-construit-avec)
+- [Mon environnement de code et mes outils](#-mon-environnement-de-code-et-mes-outils)
+- [Pourquoi ce choix](#-pourquoi-ce-choix)
+- [Le plus gros challenge du projet](#-le-plus-gros-challenge-du-projet)
+- [Feedback](#-feedback)
+
+- [Comment démarrer l'application](#-comment-démarrer-application)
+- [Node Package Manager](#-node-package-manager)
+- [Installer les packages](#-installer-les-packages)
+- [Lancer l'application](#-rlancer-application)
+- [Lancer les Tests](#-lancer-les-tests)
+- [A améliorer](#-a-ameliorer)
+
+## Objectif principal
+
+- Mettre en place une api permettant la consommation du service depuis divers dispositifs
+
+## 🏗 Construit avec
 
 - Symfony 6.2
 - Webpack encore
 - EasyAdmin
 - Stripe
-  <br>
+- Api platform
+- Lexik JWT
+
+## Mon environnement de code et mes outils
+
+- VsCode
+- MacOs
+- NPM
+- EsLint
+- Prettier
+- Postman
+
+## Le plus gros challenge sur le projet
+
+- Mettre en place le JWT token afin de sécuriser l'api et d'authentifier les utilisateurs
+
+  
+## Feedback
+
+Bonne opportunité d'analyser un projet en cours et d'apporter une solution adapté à une problématique
 
 ### Pré-requis :
 
@@ -105,3 +143,17 @@ mv composer.phar /usr/local/bin/composer
 wget https://get.symfony.com/cli/installer -O - | bash
 mv /Users/VOTRENOM/.symfony5/bin/symfony /usr/local/bin/symfony
 ```
+
+### 🧪 Lancer les tests
+
+Pour lancer les tests unitaires:
+
+```
+php bin/phpunit                       
+```
+
+## 📑 A améliorer
+
+- Plus de tests unitaires
+- - Mise en place de Docker pour faciliter l'accés à l'application
+
