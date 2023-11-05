@@ -118,6 +118,7 @@ http://localhost:8000/admin <br>
 Login : admin@admin.com<br>
 Pass : ilovejam<br>
 
+Télécharger et installer la partie front end présente ici : https://github.com/IssaDia/application_jam_3wa-front
 ## Ressources
 
 ### Installer Composer
