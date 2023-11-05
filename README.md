@@ -152,5 +152,5 @@ php bin/phpunit
 ## 📑 A améliorer
 
 - Plus de tests unitaires
-- - Mise en place de Docker pour faciliter l'accés à l'application
+- Mise en place de Docker pour faciliter l'accés à l'application
 
