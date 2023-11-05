@@ -3,6 +3,8 @@
 
 Projet e-commerce de confitures avec panier, espace d'administration et filtres avancés.
 
+Veuillez trouver sur le (wiki)[https://github.com/IssaDia/application_jam_3wa-api/wiki] les détails des choix d'implémentations et les réponses à une partie de l'examen
+
 # 📜 Sommaire
 
 - [Objectif](#-objectif)
@@ -64,6 +66,8 @@ Pour vérifier vos versions :
 php -v
 composer -v
 ```
+
+Télécharger et installer la partie front end présente ici : https://github.com/IssaDia/application_jam_3wa-front
 
 ### Webpack encore
 
