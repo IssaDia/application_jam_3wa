@@ -99,46 +99,6 @@ DATABASE_URL="mysql://user:password@127.0.0.1:8889/shop?serverVersion=5.7.9"
 
 ```
 
-### Installer LexikJWT
-
-```
-composer require "lexik/jwt-authentication-bundle
-```
-### Générer les clés SSL
-
-```
-php bin/console lexik:jwt:generate-keypair
-```
-
-### Créer un fichier .env et inclure les clés
-
-```
-###> lexik/jwt-authentication-bundle ###
-JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
-JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
-JWT_PASSPHRASE=secretAPIKey
-###< lexik/jwt-authentication-bundle ###
-```
-### aller dans config/routes.yaml et remplacer le contenu par :
-```
-controllers:
-  resource: ../src/Controller/
-  type: annotation
-
-kernel:
-  resource: ../src/Kernel.php
-  type: annotation
-api_login_check:
-  path: /api/login_check
-api_signup:
-  path: /api/signup
-  controller: App\Controller\SignupController::signup
-api_login:
-  path: /api/login
-  controller: App\Controller\LoginController::login
-api_checkout:
-  path: /api/checkout
-  controller: App\Controller\CheckoutController::checkout_check
 ```
 ### 3. Console
 
@@ -157,15 +117,9 @@ symfony server:start
 
 Les fixtures permettent de créer les produits, les catégories et un utilisateur Admin.
 
-Accès à la page d'accueil : <br>
-http://localhost:8000 <br>
 
-Accès au tableau de bord d'administration : <br>
-http://localhost:8000/admin <br>
-Login : admin@admin.com<br>
-Pass : ilovejam<br>
+Puis télécharger le repository et installer la partie front end présente ici : https://github.com/IssaDia/application_jam_3wa-front
 
-Télécharger et installer la partie front end présente ici : https://github.com/IssaDia/application_jam_3wa-front
 ## Ressources
 
 ### Installer Composer
