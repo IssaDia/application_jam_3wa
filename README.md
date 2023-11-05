@@ -52,7 +52,7 @@ Veuillez trouver sur le [wiki](https://github.com/IssaDia/application_jam_3wa-ap
 
 Bonne opportunité d'analyser un projet en cours et d'apporter une solution adapté à une problématique
 
-### Pré-requis :
+## Pré-requis :
 
 - Avoir PHP >=8.1 installé.
 - Avoir installé composer
@@ -68,14 +68,6 @@ composer -v
 ```
 
 Télécharger et installer la partie front end présente ici : https://github.com/IssaDia/application_jam_3wa-front
-
-### Webpack encore
-
-3 entrées permettent respectivement de :
-
-- ajouter au panier en AJAX,
-- faire des recherches en AJAX,
-- faciliter le filtre du contenu sur la page produits.
 
 ## Quick start
 
