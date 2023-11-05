@@ -89,10 +89,57 @@ Puis, <br>
 Allez sur https://dashboard.stripe.com/test/dashboard Votre clé secrète se trouve en bas à droite sur votre dashboard. Ciquez sur l'oeil pour la découvrir.
 ![README/img_1.png](README/img_1.png)
 
-### 2. Dans /.env.local :<br>
+### 2. Créer un fichier /.env.local :<br>
 
 Mettre à jour ses identifiants de connexion MySql et sa secretkey de Stripe
 
+```
+STRIPE_API_KEY="sk_test_..."
+DATABASE_URL="mysql://user:password@127.0.0.1:8889/shop?serverVersion=5.7.9"
+
+```
+
+### Installer LexikJWT
+
+```
+composer require "lexik/jwt-authentication-bundle
+```
+### Générer les clés SSL
+
+```
+php bin/console lexik:jwt:generate-keypair
+```
+
+### Créer un fichier .env et inclure les clés
+
+```
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=secretAPIKey
+###< lexik/jwt-authentication-bundle ###
+```
+### aller dans config/routes.yaml et remplacer le contenu par :
+```
+controllers:
+  resource: ../src/Controller/
+  type: annotation
+
+kernel:
+  resource: ../src/Kernel.php
+  type: annotation
+api_login_check:
+  path: /api/login_check
+api_signup:
+  path: /api/signup
+  controller: App\Controller\SignupController::signup
+api_login:
+  path: /api/login
+  controller: App\Controller\LoginController::login
+api_checkout:
+  path: /api/checkout
+  controller: App\Controller\CheckoutController::checkout_check
+```
 ### 3. Console
 
 Enfin, installez les dépendances, créez votre base de données et remplissez la des fixtures grâce aux commandes suivantes :
